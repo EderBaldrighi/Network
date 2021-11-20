@@ -1,3 +1,3 @@
 # Network
 
-A description of this package.
+A simple native iOS network layer based on protocol implementation.
