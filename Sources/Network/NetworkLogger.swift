@@ -3,7 +3,7 @@
 //  NetworkExample
 //
 //  Created by Eder Baldrighi on 11/12/20.
-//  Copyright © 2020 GO.K. All rights reserved.
+//  Copyright © 2020 Mobster. All rights reserved.
 //
 
 import Foundation
