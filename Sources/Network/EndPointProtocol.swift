@@ -9,7 +9,7 @@
 import Foundation
 
 /// EndPoint protocol
-protocol EndPointProtocol {
+public protocol EndPointProtocol {
     /// HTTP method from request
     var httpMethod: HttpMethod { get }
     /// Base url from request

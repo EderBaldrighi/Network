@@ -9,7 +9,7 @@
 import Foundation
 
 /// Network enum error
-internal enum NetworkError : String, Error {
+public enum NetworkError : String, Error {
     case invalidBodyRequest = "Invalid body request."
     case parseFailed = "Parase failed."
     case requestFailed = "request failed"

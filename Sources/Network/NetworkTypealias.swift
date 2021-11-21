@@ -8,8 +8,8 @@
 
 import Foundation
 
-internal typealias Success = (_ data: Data) -> ()
-internal typealias Failure = (_ error: Error) -> ()
-internal typealias HttpHeaders = [String: String]
-internal typealias UrlParameters = [String: String]
-internal typealias BodyParameters = [String: Any]
+public typealias Success = (_ data: Data) -> ()
+public typealias Failure = (_ error: Error) -> ()
+public typealias HttpHeaders = [String: String]
+public typealias UrlParameters = [String: String]
+public typealias BodyParameters = [String: Any]

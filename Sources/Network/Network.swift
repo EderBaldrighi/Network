@@ -9,9 +9,11 @@
 import Foundation
 
 /// Class responsbile to build, configure, cancel and make request
-internal class Network<EndPoint: EndPointProtocol>: NetworkProtocol {
+public class Network<EndPoint: EndPointProtocol>: NetworkProtocol {
     // MARK: - Variables
     private var task: URLSessionTask?
+    // MARK: - Initializer
+    public init() { }
     // MARK: - Public functions
     /// Function resposible to make the request
     /// - Parameters:
@@ -19,7 +21,7 @@ internal class Network<EndPoint: EndPointProtocol>: NetworkProtocol {
     ///   - endPoint: endPoint protocol
     ///   - success: success block
     ///   - failure: failure block
-    func request(_ endPoint: EndPoint, success: @escaping Success, failure: @escaping Failure) {
+    public func request(_ endPoint: EndPoint, success: @escaping Success, failure: @escaping Failure) {
         let session = URLSession.shared
         do {
             let request = try self.configRequest(from: endPoint)
@@ -37,7 +39,7 @@ internal class Network<EndPoint: EndPointProtocol>: NetworkProtocol {
         self.task?.resume()
     }
     /// Function responsible to cancel current task
-    func cancel() {
+    public func cancel() {
         guard let task = self.task else { return }
         task.cancel()
     }
