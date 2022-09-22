@@ -1,6 +1,6 @@
 //
 //  Network.swift
-//  NetworkExample
+//  Network
 //
 //  Created by Eder Baldrighi on 01/12/2020.
 //  Copyright © 2020 Mobster. All rights reserved.
@@ -54,8 +54,8 @@ public class Network<EndPoint: EndPointProtocol>: NetworkProtocol {
             var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30.0)
             request.httpMethod = endPoint.httpMethod.rawValue
             request.configureHeaders(endPoint.headers)
-            request.configureUrl(endPoint.urlParameters)
-            try request.configureBody(endPoint.bodyParameters)
+            request.configureUrl(endPoint.urlParameters?.urlDictionary)
+            try request.configureBody(endPoint.bodyParameters?.bodyDictionary)
             return request
         } catch {
             throw error

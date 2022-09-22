@@ -1,6 +1,6 @@
 //
 //  HttpMethod.swift
-//  NetworkExample
+//  Network
 //
 //  Created by Eder Baldrighi on 01/12/2020.
 //  Copyright © 2020 Mobster. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  EndPointProtocol.swift
-//  NetworkExample
+//  Network
 //
 //  Created by Eder Baldrighi on 01/12/2020.
 //  Copyright © 2020 Mobster. All rights reserved.
@@ -19,7 +19,7 @@ public protocol EndPointProtocol {
     /// Optional headers from request
     var headers: HttpHeaders? { get }
     /// Optional url parameters
-    var urlParameters: UrlParameters? { get }
+    var urlParameters: Codable? { get }
     /// Optional body paramenters
-    var bodyParameters: BodyParameters? { get }
+    var bodyParameters: Codable? { get }
 }
