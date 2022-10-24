@@ -29,7 +29,7 @@ internal extension URLRequest {
             } else if let bodyArray = body?.bodyArray {
                 self.httpBody = try self.configureBodyArray(bodyArray)
             }
-            self.validateUrlContentType()
+            self.validateBodyContetType()
         } catch {
             throw NetworkError.invalidBodyRequest
         }
