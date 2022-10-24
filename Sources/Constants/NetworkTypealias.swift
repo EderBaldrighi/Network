@@ -13,3 +13,4 @@ public typealias Failure = (_ error: Error) -> ()
 public typealias HttpHeaders = [String: String]
 public typealias UrlParameters = [String: String]
 public typealias BodyParameters = [String: Any]
+public typealias BodyArray = [Any]

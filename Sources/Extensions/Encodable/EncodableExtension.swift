@@ -13,6 +13,11 @@ extension Encodable {
         guard let data = try? JSONEncoder().encode(self) else { return nil }
         return (try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)).flatMap { $0 as? [String: Any] }
     }
+    /// Converts encodable structure to array.
+    var bodyArray: BodyArray? {
+        guard let data = try? JSONEncoder().encode([self]) else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data)).flatMap { $0 as? [Any] }
+    }
     /// Converts encodable structure to string dictionary.
     var urlDictionary: UrlParameters? {
         guard let data = try? JSONEncoder().encode(self) else { return nil }

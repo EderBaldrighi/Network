@@ -20,14 +20,16 @@ internal extension URLRequest {
         }
     }
     /// Function responsible to configure body request parameters
-    /// - Parameter parameters: body request parameters
+    /// - Parameter body: body request object
     /// - Throws: body request serialization error
-    mutating func configureBody(_ parameters: BodyParameters?) throws {
-        guard let parameters = parameters else { return }
+    mutating func configureBody(_ body: Codable?) throws {
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
-            self.httpBody = jsonData
-            self.validateBodyContetType()
+            if let bodyParamenters = body?.bodyDictionary {
+                self.httpBody = try self.configureBodyParamenters(bodyParamenters)
+            } else if let bodyArray = body?.bodyArray {
+                self.httpBody = try self.configureBodyArray(bodyArray)
+            }
+            self.validateUrlContentType()
         } catch {
             throw NetworkError.invalidBodyRequest
         }
@@ -47,6 +49,22 @@ internal extension URLRequest {
         self.validateUrlContentType()
     }
     // MARK: - Private functions
+    /// Configure body parameters with key/value struct
+    private mutating func configureBodyParamenters(_ parameters: BodyParameters) throws -> Data {
+        do {
+            return try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+        } catch {
+            throw NetworkError.invalidBodyRequest
+        }
+    }
+    /// Configure body parameters with array
+    private mutating func configureBodyArray(_ array: BodyArray) throws -> Data {
+        do {
+            return try JSONSerialization.data(withJSONObject: array)
+        } catch {
+            throw NetworkError.invalidBodyRequest
+        }
+    }
     /// Validate content type header from body request parameters. Default value is application/json
     private mutating func validateBodyContetType() {
         if self.value(forHTTPHeaderField: "Content-Type") == nil {

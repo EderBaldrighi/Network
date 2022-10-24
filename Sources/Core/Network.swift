@@ -55,7 +55,7 @@ public class Network<EndPoint: EndPointProtocol>: NetworkProtocol {
             request.httpMethod = endPoint.httpMethod.rawValue
             request.configureHeaders(endPoint.headers)
             request.configureUrl(endPoint.urlParameters?.urlDictionary)
-            try request.configureBody(endPoint.bodyParameters?.bodyDictionary)
+            try request.configureBody(endPoint.bodyParameters)
             return request
         } catch {
             throw error
