@@ -23,3 +23,16 @@ public protocol EndPointProtocol {
     /// Optional body paramenters
     var bodyParameters: Codable? { get }
 }
+
+extension EndPointProtocol {
+    /// Request object based on EndPointProtocol
+    var request: URLRequest {
+        let url = self.baseUrl.appendingPathComponent(self.path)
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30.0)
+        request.httpMethod = self.httpMethod.rawValue
+        request.configureHeaders(self.headers)
+        request.configureUrl(self.urlParameters?.dictionary)
+        request.configureBody(self.bodyParameters)
+        return request
+    }
+}

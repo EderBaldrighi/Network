@@ -22,43 +22,19 @@ public class Network<EndPoint: EndPointProtocol>: NetworkProtocol {
     ///   - success: success block
     ///   - failure: failure block
     public func request(_ endPoint: EndPoint, success: @escaping Success, failure: @escaping Failure) {
-        let session = URLSession.shared
-        do {
-            let request = try self.configRequest(from: endPoint)
-            self.task = session.dataTask(with: request, completionHandler: { (data, response, error) in
-                NetworkLogger.shared.log(request: request, response: response, data: data)
-                guard let data = data else {
-                    failure(error ?? NetworkError.requestFailed)
-                    return
-                }
-                success(data)
-            })
-        } catch {
-            failure(error)
-        }
+        self.task = URLSession.shared.dataTask(with: endPoint.request, completionHandler: { (data, response, error) in
+            NetworkLogger.shared.log(request: endPoint.request, response: response, data: data)
+            guard let data = data else {
+                failure(error ?? NetworkError.requestFailed)
+                return
+            }
+            success(data)
+        })
         self.task?.resume()
     }
     /// Function responsible to cancel current task
     public func cancel() {
         guard let task = self.task else { return }
         task.cancel()
-    }
-    // MARK: - File private functions
-    /// Function responbile to build and configure request
-    /// - Parameter endPoint: endpoint protocol
-    /// - Throws: error
-    /// - Returns: URLRequest
-    fileprivate func configRequest(from endPoint: EndPointProtocol) throws -> URLRequest {
-        do {
-            let url = endPoint.baseUrl.appendingPathComponent(endPoint.path)
-            var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30.0)
-            request.httpMethod = endPoint.httpMethod.rawValue
-            request.configureHeaders(endPoint.headers)
-            request.configureUrl(endPoint.urlParameters?.urlDictionary)
-            try request.configureBody(endPoint.bodyParameters)
-            return request
-        } catch {
-            throw error
-        }
     }
 }

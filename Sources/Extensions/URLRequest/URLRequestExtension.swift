@@ -22,49 +22,23 @@ internal extension URLRequest {
     /// Function responsible to configure body request parameters
     /// - Parameter body: body request object
     /// - Throws: body request serialization error
-    mutating func configureBody(_ body: Codable?) throws {
-        do {
-            if let bodyParamenters = body?.bodyDictionary {
-                self.httpBody = try self.configureBodyParamenters(bodyParamenters)
-            } else if let bodyArray = body?.bodyArray {
-                self.httpBody = try self.configureBodyArray(bodyArray)
-            }
-            self.validateBodyContetType()
-        } catch {
-            throw NetworkError.invalidBodyRequest
-        }
+    mutating func configureBody(_ body: Codable?) {
+        self.httpBody = body?.data
+        self.validateBodyContetType()
     }
     /// Function responsible to configure request url parameters
-    /// - Parameter parameters: url parameters
+    /// - Parameter parameters: url query parameters
     mutating func configureUrl(_ parameters: UrlParameters?) {
         guard let url = self.url else { return }
         guard let parameters = parameters, !parameters.isEmpty else { return }
         guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
-        urlComponents.queryItems = [URLQueryItem]()
-        for (key, value) in parameters {
-            let queryItem = URLQueryItem(name: key, value: "\(value)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed))
-            urlComponents.queryItems?.append(queryItem)
+        urlComponents.queryItems = parameters.map { (key: String, value: Any) in
+            URLQueryItem(name: key, value: "\(value)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed))
         }
         self.url = urlComponents.url
         self.validateUrlContentType()
     }
     // MARK: - Private functions
-    /// Configure body parameters with key/value struct
-    private mutating func configureBodyParamenters(_ parameters: BodyParameters) throws -> Data {
-        do {
-            return try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
-        } catch {
-            throw NetworkError.invalidBodyRequest
-        }
-    }
-    /// Configure body parameters with array
-    private mutating func configureBodyArray(_ array: BodyArray) throws -> Data {
-        do {
-            return try JSONSerialization.data(withJSONObject: array)
-        } catch {
-            throw NetworkError.invalidBodyRequest
-        }
-    }
     /// Validate content type header from body request parameters. Default value is application/json
     private mutating func validateBodyContetType() {
         if self.value(forHTTPHeaderField: "Content-Type") == nil {

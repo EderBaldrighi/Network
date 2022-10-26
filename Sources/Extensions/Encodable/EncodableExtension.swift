@@ -7,20 +7,14 @@
 
 import Foundation
 
-extension Encodable {
+internal extension Encodable {
     /// Converts encodable structure to dictionary.
-    var bodyDictionary: BodyParameters? {
-        guard let data = try? JSONEncoder().encode(self) else { return nil }
-        return (try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)).flatMap { $0 as? [String: Any] }
-    }
-    /// Converts encodable structure to array.
-    var bodyArray: BodyArray? {
-        guard let data = try? JSONEncoder().encode([self]) else { return nil }
-        return (try? JSONSerialization.jsonObject(with: data)).flatMap { $0 as? [Any] }
+    var data: Data? {
+        return try? JSONEncoder().encode(self)
     }
     /// Converts encodable structure to string dictionary.
-    var urlDictionary: UrlParameters? {
+    var dictionary: [String: Any]? {
         guard let data = try? JSONEncoder().encode(self) else { return nil }
-        return (try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)).flatMap { $0 as? [String: String] }
+        return (try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)).flatMap { $0 as? [String: Any] }
     }
 }
