@@ -8,33 +8,30 @@
 
 import Foundation
 
-/// Class responsbile to build, configure, cancel and make request
-public class Network<EndPoint: EndPointProtocol>: NetworkProtocol {
+/// Class responsbile to make and cancel request
+class Network {
     // MARK: - Variables
     private var task: URLSessionTask?
-    // MARK: - Initializer
-    public init() { }
-    // MARK: - Public functions
-    /// Function resposible to make the request
+    // MARK: - Functions
+    /// Function responsible to make request
     /// - Parameters:
     ///   - T: Codable response type
-    ///   - endPoint: endPoint protocol
-    ///   - success: success block
-    ///   - failure: failure block
-    public func request(_ endPoint: EndPoint, success: @escaping Success, failure: @escaping Failure) {
-        self.task = URLSession.shared.dataTask(with: endPoint.request, completionHandler: { (data, response, error) in
+    ///   - endPoint: EndPoint protocol
+    ///   - success: Success trailing closures
+    ///   - failure: Failure trailing closures
+    func request<T: Codable>(endPoint: EndPoint, success: ((T) -> Void)? = nil, failure: ((Error) -> Void)? = nil) {
+        self.task = URLSession.shared.dataTask(with: endPoint.request) { data, response, error in
             NetworkLogger.shared.log(request: endPoint.request, response: response, data: data)
-            guard let data = data else {
-                failure(error ?? NetworkError.requestFailed)
+            guard let data = data, let object = try? JSONDecoder().decode(T.self, from: data) else {
+                failure?(error ?? NetworkError.parseFailed)
                 return
             }
-            success(data)
-        })
+            success?(object)
+        }
         self.task?.resume()
     }
-    /// Function responsible to cancel current task
-    public func cancel() {
-        guard let task = self.task else { return }
-        task.cancel()
+    /// Function responsible to cancel request
+    func cancel() {
+        task?.cancel()
     }
 }

@@ -9,30 +9,11 @@
 import Foundation
 
 /// EndPoint protocol
-public protocol EndPointProtocol {
-    /// HTTP method from request
+internal protocol EndPoint {
     var httpMethod: HttpMethod { get }
-    /// Base url from request
     var baseUrl: URL { get }
-    /// Complete path from request
     var path: String { get }
-    /// Optional headers from request
     var headers: HttpHeaders? { get }
-    /// Optional url parameters
     var urlParameters: Codable? { get }
-    /// Optional body paramenters
     var bodyParameters: Codable? { get }
-}
-
-extension EndPointProtocol {
-    /// Request object based on EndPointProtocol
-    var request: URLRequest {
-        let url = self.baseUrl.appendingPathComponent(self.path)
-        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30.0)
-        request.httpMethod = self.httpMethod.rawValue
-        request.configureHeaders(self.headers)
-        request.configureUrl(self.urlParameters?.dictionary)
-        request.configureBody(self.bodyParameters)
-        return request
-    }
 }
