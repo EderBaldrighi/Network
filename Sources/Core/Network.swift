@@ -20,8 +20,8 @@ class Network {
     ///   - success: Success trailing closures
     ///   - failure: Failure trailing closures
     func request<T: Codable>(endPoint: EndPoint, success: ((T) -> Void)? = nil, failure: ((Error) -> Void)? = nil) {
-        self.task = URLSession.shared.dataTask(with: endPoint.request) { data, response, error in
-            NetworkLogger.shared.log(request: endPoint.request, response: response, data: data)
+        self.task = URLSession.shared.dataTask(with: endPoint.urlRequest) { data, response, error in
+            NetworkLogger.shared.log(request: endPoint.urlRequest, response: response, data: data)
             guard let data = data, let object = try? JSONDecoder().decode(T.self, from: data) else {
                 failure?(error ?? NetworkError.parseFailed)
                 return

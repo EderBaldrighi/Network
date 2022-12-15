@@ -10,7 +10,7 @@ import Foundation
 extension EndPoint {
     // MARK: - Variables
     /// Request object based on EndPoint protocol
-    var request: URLRequest {
+    var urlRequest: URLRequest {
         let url = self.baseUrl.appendingPathComponent(self.path)
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30.0)
         request.httpMethod = self.httpMethod.rawValue
@@ -25,7 +25,7 @@ extension EndPoint {
     ///   - T: Codable response type
     ///   - success: Success trailing closures
     ///   - failure: Failure trailing closures
-    func request<T: Codable>(success: ((T) -> Void)? = nil, failure: ((Error)-> Void)? = nil) {
+    public func request<T: Codable>(success: ((T) -> Void)? = nil, failure: ((Error)-> Void)? = nil) {
         Network().request(endPoint: self, success: success, failure: failure)
     }
 }
