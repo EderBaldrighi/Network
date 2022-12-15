@@ -9,7 +9,7 @@
 import Foundation
 
 /// EndPoint protocol
-internal protocol EndPoint {
+public protocol EndPoint {
     var httpMethod: HttpMethod { get }
     var baseUrl: URL { get }
     var path: String { get }
