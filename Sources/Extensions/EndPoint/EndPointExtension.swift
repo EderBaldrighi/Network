@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal extension EndPoint {
+extension EndPoint {
     // MARK: - Variables
     /// Request object based on EndPoint protocol
     var request: URLRequest {
